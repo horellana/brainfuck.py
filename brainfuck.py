@@ -6,13 +6,13 @@ def read_code():
     valid = [ '>', '<', '+', '-', '.', ',', '[', ']' ]
     return [ c for c in sys.stdin.read() if c in valid ]
 
-data = [ 0 for i in range(50) ]
+data = [ 0 for i in range(30000) ]
 code = read_code()
 
 code_pos = 0
 data_pos = 0
 
-while code_pos <= len(code):
+while code_pos < len(code):
     step = 1
     c = code[code_pos]
 
@@ -39,7 +39,5 @@ while code_pos <= len(code):
             while code[code_pos - 1] != '[':
                 code_pos = code_pos - 1
 
-    print(data)
-                
     code_pos = code_pos + step
             
