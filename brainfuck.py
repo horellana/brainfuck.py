@@ -25,7 +25,7 @@ while code_pos < len(code):
     elif c == '-':
         data[data_pos] = data[data_pos] - 1
     elif c == '.':
-        print( chr( data[data_pos] ) )
+        sys.stdout.write( chr( data[data_pos] ) )
     elif c == ',':
         data[data_pos] = ord( sys.stdin.read() )
     elif c == '[':
