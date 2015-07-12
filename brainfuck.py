@@ -2,6 +2,7 @@
 
 import sys
 
+
 def find_matching_end_bracket(code, code_pos):
     a = []
     for i in range(code_pos + 1, len(code)):
@@ -15,6 +16,7 @@ def find_matching_end_bracket(code, code_pos):
                 a.pop()
 
     raise Exception("Could not find matching `]` bracket")
+
 
 def find_matching_start_bracket(code, code_pos):
     a = []
@@ -30,11 +32,13 @@ def find_matching_start_bracket(code, code_pos):
 
     raise Exception("Could not find matching `[` bracket")
 
-def read(string):
-    valid = [ '>', '<', '+', '-', '.', ',', '[', ']' ]
-    return [ c for c in string if c in valid ]
 
-def eval(code, data, code_pos = 0, data_pos = 0):
+def read(string):
+    valid = ['>', '<', '+', '-', '.', ',', '[', ']']
+    return [c for c in string if c in valid]
+
+
+def eval(code, data, code_pos=0, data_pos=0):
     while code_pos < len(code):
         step = 1
         c = code[code_pos]
@@ -57,9 +61,9 @@ def eval(code, data, code_pos = 0, data_pos = 0):
             else:
                 data[data_pos] = data[data_pos] - 1
         elif c == '.':
-            sys.stdout.write( chr( data[data_pos] ) )
+            sys.stdout.write(chr(data[data_pos]))
         elif c == ',':
-            data[data_pos] = ord( sys.stdin.read() )
+            data[data_pos] = ord(sys.stdin.read())
         elif c == '[':
             if data[data_pos] == 0:
                 step = 0
@@ -69,8 +73,8 @@ def eval(code, data, code_pos = 0, data_pos = 0):
                 step = 0
                 code_pos = find_matching_start_bracket(code, code_pos) + 1
         code_pos = code_pos + step
-            
+
 if __name__ == '__main__':
-    data = [ 0 for i in range(9999) ]
+    data = [0 for i in range(9999)]
     code = read(''.join(sys.stdin.readlines()))
     eval(code, data)
