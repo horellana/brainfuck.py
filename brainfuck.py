@@ -3,13 +3,6 @@
 import sys
 
 def check_code(code):
-    opener = [ c for c in code if c == '[' ]
-    closer = [ c for c in code if c == ']' ]
-
-    if len(opener) != len(closer):
-        sys.stderr.write("Syntax error\n")
-        sys.exit(-1)
-
     a = []
     for c in code:
         if c == '[':
@@ -21,11 +14,15 @@ def check_code(code):
                 sys.stderr.write("Misplaced `]`\n")
                 sys.exit(-1)
 
+    if len(a) != 0:
+        sys.stderr.write("Unbalanced braces\n")
+        sys.exit(-1)
+
 def read_code():
     valid = [ '>', '<', '+', '-', '.', ',', '[', ']' ]
     return [ c for c in sys.stdin.read() if c in valid ]
 
-data = [ 0 for i in range(30000) ]
+data = [ 0 for i in range(9999) ]
 
 code = read_code()
 check_code(code)
