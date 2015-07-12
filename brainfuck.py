@@ -2,69 +2,75 @@
 
 import sys
 
-def check_code(code):
+def find_matching_end_bracket(code, code_pos):
     a = []
-    for c in code:
+    for i in range(code_pos + 1, len(code)):
+        c = code[i]
         if c == '[':
             a.append(c)
-        elif c == ']':
-            try:
+        if c == ']':
+            if len(a) == 0:
+                return i
+            else:
                 a.pop()
-            except IndexError:
-                sys.stderr.write("Misplaced `]`\n")
-                sys.exit(-1)
 
-    if len(a) != 0:
-        sys.stderr.write("Unbalanced braces\n")
-        sys.exit(-1)
+    raise Exception("Could not find matching `]` bracket")
 
-def read_code():
+def find_matching_start_bracket(code, code_pos):
+    a = []
+    for i in range(code_pos - 1, -1, -1):
+        c = code[i]
+        if c == ']':
+            a.append(c)
+        if c == '[':
+            if len(a) == 0:
+                return i
+            else:
+                a.pop()
+
+    raise Exception("Could not find matching `[` bracket")
+
+def read(string):
     valid = [ '>', '<', '+', '-', '.', ',', '[', ']' ]
-    return [ c for c in sys.stdin.read() if c in valid ]
+    return [ c for c in string if c in valid ]
 
-data = [ 0 for i in range(9999) ]
+def eval(code, data, code_pos = 0, data_pos = 0):
+    while code_pos < len(code):
+        step = 1
+        c = code[code_pos]
 
-code = read_code()
-check_code(code)
-
-code_pos = 0
-data_pos = 0
-
-while code_pos < len(code):
-    step = 1
-    c = code[code_pos]
-
-    if c == '>':
-        data_pos = data_pos + 1
-        if data_pos > len(data):
-            data_pos = 0
-    elif c == '<':
-        if data_pos != 0:
-            data_pos = data_pos - 1
-    elif c == '+':
-        if data[data_pos] == 255:
-            data[data_pos] = 0
+        if c == '>':
+            data_pos = data_pos + 1
+            if data_pos > len(data):
+                data_pos = 0
+        elif c == '<':
+            if data_pos != 0:
+                data_pos = data_pos - 1
+        elif c == '+':
+            if data[data_pos] == 255:
+                data[data_pos] = 0
+            else:
+                data[data_pos] = data[data_pos] + 1
+        elif c == '-':
+            if data[data_pos] == 0:
+                data[data_pos] = 255
+            else:
+                data[data_pos] = data[data_pos] - 1
+        elif c == '.':
+            sys.stdout.write( chr( data[data_pos] ) )
+        elif c == ',':
+            data[data_pos] = ord( sys.stdin.read() )
+        elif c == '[':
+            if data[data_pos] == 0:
+                step = 0
+                code_pos = find_matching_end_bracket(code, code_pos) + 1
         else:
-            data[data_pos] = data[data_pos] + 1
-    elif c == '-':
-        if data[data_pos] == 0:
-            data[data_pos] = 255
-        else:
-            data[data_pos] = data[data_pos] - 1
-    elif c == '.':
-        sys.stdout.write( chr( data[data_pos] ) )
-    elif c == ',':
-        data[data_pos] = ord( sys.stdin.read() )
-    elif c == '[':
-        if data[data_pos] == 0:
-            step = 0
-            while code[code_pos - 1] != ']':
-                code_pos = code_pos + 1
-    else:
-        if data[data_pos] != 0:
-            step = 0
-            while code[code_pos - 1] != '[':
-                code_pos = code_pos - 1
-
-    code_pos = code_pos + step
+            if data[data_pos] != 0:
+                step = 0
+                code_pos = find_matching_start_bracket(code, code_pos) + 1
+        code_pos = code_pos + step
             
+if __name__ == '__main__':
+    data = [ 0 for i in range(9999) ]
+    code = read(''.join(sys.stdin.readlines()))
+    eval(code, data)
