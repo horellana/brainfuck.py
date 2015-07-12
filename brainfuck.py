@@ -18,16 +18,25 @@ while code_pos < len(code):
 
     if c == '>':
         data_pos = data_pos + 1
+        if data_pos > len(data):
+            data_pos = 0
     elif c == '<':
-        data_pos = data_pos - 1
+        if data_pos != 0:
+            data_pos = data_pos - 1
     elif c == '+':
-        data[data_pos] = data[data_pos] + 1  
+        if data[data_pos] == 255:
+            data[data_pos] = 0
+        else:
+            data[data_pos] = data[data_pos] + 1
     elif c == '-':
-        data[data_pos] = data[data_pos] - 1
+        if data[data_pos] == 0:
+            data[data_pos] = 255
+        else:
+            data[data_pos] = data[data_pos] - 1
     elif c == '.':
         sys.stdout.write( chr( data[data_pos] ) )
     elif c == ',':
-        data[data_pos] = ord( sys.stdin.read() )
+        data[data_pos] = ord( sys.stdin.read(1) )
     elif c == '[':
         if data[data_pos] == 0:
             step = 0
