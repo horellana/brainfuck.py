@@ -3,8 +3,11 @@
 import sys
 
 def check_code(code):
-    if len( [ c for c in code if c in ['[', ']'] ] ) % 2 != 0:
-        sys.stderr.write("There is a syntax error somewhere\n")
+    opener = [ c for c in code if c == '[' ]
+    closer = [ c for c in code if c == ']' ]
+
+    if len(opener) != len(closer):
+        sys.stderr.write("Syntax error\n")
         sys.exit(-1)
 
     a = []
@@ -15,7 +18,7 @@ def check_code(code):
             try:
                 a.pop()
             except IndexError:
-                sys.stderr.write("Misplaced `]` in position\n")
+                sys.stderr.write("Misplaced `]`\n")
                 sys.exit(-1)
 
 def read_code():
