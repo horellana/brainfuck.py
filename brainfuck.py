@@ -2,12 +2,30 @@
 
 import sys
 
+def check_code(code):
+    if len( [ c for c in code if c in ['[', ']'] ] ) % 2 != 0:
+        sys.stderr.write("There is a syntax error somewhere\n")
+        sys.exit(-1)
+
+    a = []
+    for c in code:
+        if c == '[':
+            a.append(c)
+        elif c == ']':
+            try:
+                a.pop()
+            except IndexError:
+                sys.stderr.write("Misplaced `]` in position\n")
+                sys.exit(-1)
+
 def read_code():
     valid = [ '>', '<', '+', '-', '.', ',', '[', ']' ]
     return [ c for c in sys.stdin.read() if c in valid ]
 
 data = [ 0 for i in range(30000) ]
+
 code = read_code()
+check_code(code)
 
 code_pos = 0
 data_pos = 0
@@ -36,7 +54,7 @@ while code_pos < len(code):
     elif c == '.':
         sys.stdout.write( chr( data[data_pos] ) )
     elif c == ',':
-        data[data_pos] = ord( sys.stdin.read(1) )
+        data[data_pos] = ord( sys.stdin.read() )
     elif c == '[':
         if data[data_pos] == 0:
             step = 0
