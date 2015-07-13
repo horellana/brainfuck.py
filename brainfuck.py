@@ -64,7 +64,7 @@ def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
         elif c == '.':
             sys.stdout.write(chr(data[data_pos]))
         elif c == ',':
-            data[data_pos] = sys.stdin.read()
+            data[data_pos] = ord(sys.stdin.read(1))
         elif c == '[':
             if data[data_pos] == 0:
                 step = 0
