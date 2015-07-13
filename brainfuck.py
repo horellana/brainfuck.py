@@ -39,7 +39,7 @@ def read(string):
     return [c for c in string if c in valid]
 
 
-def eval(code, data, code_pos=0, data_pos=0):
+def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
     while code_pos < len(code):
         step = 1
         c = code[code_pos]
@@ -77,8 +77,6 @@ def eval(code, data, code_pos=0, data_pos=0):
 
 
 def main():
-    data = [0 for i in range(9999)]
-
     parser = argparse.ArgumentParser()
     parser.add_argument('-e', '--eval', help='eval a string of code')
     parser.add_argument('-f', '--file', help='execute a file')
@@ -87,12 +85,13 @@ def main():
 
     if args.eval:
         code = read(args.eval)
-        eval(code, data)
+        eval(code)
     elif args.file:
         with open(args.file, 'r') as infile:
             code = read(''.join(infile.readlines()))
-            eval(code, data)
+            eval(code)
     else:
+        data = [0 for i in range(9999)]
         while True:
             sys.stdout.write("bf> ")
             sys.stdout.flush()
