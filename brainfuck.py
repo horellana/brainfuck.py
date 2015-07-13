@@ -80,6 +80,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-e', '--eval', help='eval a string of code')
     parser.add_argument('-f', '--file', help='execute a file')
+    parser.add_argument('-r', '--repl', help='enter a really simple repl',
+                        action='store_true')
 
     args = parser.parse_args()
 
@@ -90,7 +92,7 @@ def main():
         with open(args.file, 'r') as infile:
             code = read(''.join(infile.readlines()))
             eval(code)
-    else:
+    elif args.repl:
         data = [0 for i in range(9999)]
         while True:
             sys.stdout.write("bf> ")
