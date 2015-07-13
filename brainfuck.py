@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import argparse
 
 
 def find_matching_end_bracket(code, code_pos):
@@ -63,7 +64,7 @@ def eval(code, data, code_pos=0, data_pos=0):
         elif c == '.':
             sys.stdout.write(chr(data[data_pos]))
         elif c == ',':
-            data[data_pos] = ord(sys.stdin.read())
+            data[data_pos] = sys.stdin.read()
         elif c == '[':
             if data[data_pos] == 0:
                 step = 0
@@ -74,7 +75,24 @@ def eval(code, data, code_pos=0, data_pos=0):
                 code_pos = find_matching_start_bracket(code, code_pos) + 1
         code_pos = code_pos + step
 
-if __name__ == '__main__':
+
+def main():
     data = [0 for i in range(9999)]
-    code = read(''.join(sys.stdin.readlines()))
-    eval(code, data)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-e', '--eval', help='eval a string of code')
+    parser.add_argument('-f', '--file', help='execute a file')
+
+    args = parser.parse_args()
+
+    if args.eval:
+        code = read(args.eval)
+        eval(code, data)
+    if args.file:
+        with open(args.file, 'r') as infile:
+            code = read(''.join(infile.readlines()))
+            eval(code, data)
+
+
+if __name__ == '__main__':
+    main()
