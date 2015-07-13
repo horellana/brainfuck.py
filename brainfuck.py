@@ -88,9 +88,16 @@ def main():
     if args.eval:
         code = read(args.eval)
         eval(code, data)
-    if args.file:
+    elif args.file:
         with open(args.file, 'r') as infile:
             code = read(''.join(infile.readlines()))
+            eval(code, data)
+    else:
+        while True:
+            sys.stdout.write("bf> ")
+            sys.stdout.flush()
+            line = sys.stdin.readline()
+            code = read(line)
             eval(code, data)
 
 
