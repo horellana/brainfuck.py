@@ -4,34 +4,20 @@ import sys
 import argparse
 
 
-def find_matching_end_bracket(code, code_pos):
-    a = []
-    for i in range(code_pos + 1, len(code)):
-        c = code[i]
-        if c == '[':
-            a.append(c)
-        if c == ']':
-            if len(a) == 0:
+def find_bracket(code, pos, bracket):
+    cont = 0
+    pair = '[' if bracket == ']' else ']'
+    for a, i in zip(code[pos:], range(pos, len(code))):
+        if a == bracket:
+            cont = cont + 1
+        if a == pair:
+            if cont == 0:
                 return i
             else:
-                a.pop()
+                cont = cont - 1
 
-    raise Exception("Could not find matching `]` bracket")
-
-
-def find_matching_start_bracket(code, code_pos):
-    a = []
-    for i in range(code_pos - 1, -1, -1):
-        c = code[i]
-        if c == ']':
-            a.append(c)
-        if c == '[':
-            if len(a) == 0:
-                return i
-            else:
-                a.pop()
-
-    raise Exception("Could not find matching `[` bracket")
+    raise Exception("Could not find `{}``bracket\nPosition: {}"
+                    .format(pair, pos))
 
 
 def read(string):
@@ -68,11 +54,13 @@ def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
         elif c == '[':
             if data[data_pos] == 0:
                 step = 0
-                code_pos = find_matching_end_bracket(code, code_pos) + 1
+                offset = find_bracket(code, code_pos + 1, '[')
+                code_pos = offset
         else:
             if data[data_pos] != 0:
                 step = 0
-                code_pos = find_matching_start_bracket(code, code_pos) + 1
+                offset = find_bracket(list(reversed(code[:code_pos])), 0, ']')
+                code_pos = code_pos - offset
         code_pos = code_pos + step
 
 
