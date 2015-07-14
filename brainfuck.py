@@ -20,7 +20,25 @@ def find_bracket(code, pos, bracket):
                     .format(pair, pos))
 
 
-def read(string):
+def prepare_code(code):
+    def map_left_bracket(b, p):
+        return (b, find_bracket(code, p + 1, b))
+
+    def map_right_bracket(b, p):
+        offset = find_bracket(list(reversed(code[:p])), 0, ']')
+        return (b, p - offset)
+
+    def map_bracket(b, p):
+        if b == '[':
+            return map_left_bracket(b, p)
+        else:
+            return map_right_bracket(b, p)
+
+    return [map_bracket(c, i) if c in ('[', ']') else c
+            for c, i in zip(code, range(len(code)))]
+
+
+def read_code(string):
     valid = ['>', '<', '+', '-', '.', ',', '[', ']']
     return [c for c in string if c in valid]
 
@@ -51,16 +69,15 @@ def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
             sys.stdout.write(chr(data[data_pos]))
         elif c == ',':
             data[data_pos] = ord(sys.stdin.read(1))
-        elif c == '[':
-            if data[data_pos] == 0:
-                step = 0
-                offset = find_bracket(code, code_pos + 1, '[')
-                code_pos = offset
         else:
-            if data[data_pos] != 0:
+            bracket, jmp = c
+            if bracket == '[' and data[data_pos] == 0:
                 step = 0
-                offset = find_bracket(list(reversed(code[:code_pos])), 0, ']')
-                code_pos = code_pos - offset
+                code_pos = jmp
+            elif bracket == ']' and data[data_pos] != 0:
+                step = 0
+                code_pos = jmp
+
         code_pos = code_pos + step
 
 
@@ -74,11 +91,11 @@ def main():
     args = parser.parse_args()
 
     if args.eval:
-        code = read(args.eval)
+        code = prepare_code(read_code(args.eval))
         eval(code)
     elif args.file:
         with open(args.file, 'r') as infile:
-            code = read(''.join(infile.readlines()))
+            code = prepare_code(read_code(''.join(infile.readlines())))
             eval(code)
     elif args.repl:
         data = [0 for i in range(9999)]
@@ -86,7 +103,7 @@ def main():
             sys.stdout.write("bf> ")
             sys.stdout.flush()
             line = sys.stdin.readline()
-            code = read(line)
+            code = read_code(line)
             eval(code, data)
 
 
