@@ -1,10 +1,19 @@
 brainfuck.py
 ============
+
 Usage
 -----
 ```
-brainfuck.py -f 'file' to execute a file
+## to execute a file
 
-brainfuck.py -e 'brainfuck code' to eval code directly
+brainfuck.py -f 'file' 
+
+## to eval code directly
+
+brainfuck.py -e 'brainfuck code' 
+
+## To start a repl
+
+brainfuck.py -r 
 
 ```
