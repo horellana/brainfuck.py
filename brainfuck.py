@@ -43,10 +43,11 @@ def read_code(string):
     return [c for c in string if c in valid]
 
 
-def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
+def bf_eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
     while code_pos < len(code):
         step = 1
         c = code[code_pos]
+        d = data[data_pos]
 
         if c == '>':
             data_pos = data_pos + 1
@@ -54,27 +55,27 @@ def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
                 data_pos = 0
         elif c == '<':
             if data_pos != 0:
-                data_pos = data_pos - 1
+                data_pos -= 1
         elif c == '+':
-            if data[data_pos] == 255:
+            if d == 255:
                 data[data_pos] = 0
             else:
-                data[data_pos] = data[data_pos] + 1
+                data[data_pos] += 1
         elif c == '-':
-            if data[data_pos] == 0:
+            if d == 0:
                 data[data_pos] = 255
             else:
-                data[data_pos] = data[data_pos] - 1
+                data[data_pos] -= 1
         elif c == '.':
-            sys.stdout.write(chr(data[data_pos]))
+            sys.stdout.write(chr(d))
         elif c == ',':
             data[data_pos] = ord(sys.stdin.read(1))
         else:
             bracket, jmp = c
-            if bracket == '[' and data[data_pos] == 0:
+            if bracket == '[' and d == 0:
                 step = 0
                 code_pos = jmp
-            elif bracket == ']' and data[data_pos] != 0:
+            elif bracket == ']' and d != 0:
                 step = 0
                 code_pos = jmp
 
@@ -92,11 +93,11 @@ def main():
 
     if args.eval:
         code = prepare_code(read_code(args.eval))
-        eval(code)
+        bf_eval(code)
     elif args.file:
         with open(args.file, 'r') as infile:
             code = prepare_code(read_code(''.join(infile.readlines())))
-            eval(code)
+            bf_eval(code)
     elif args.repl:
         data = [0 for i in range(9999)]
         while True:
@@ -104,7 +105,7 @@ def main():
             sys.stdout.flush()
             line = sys.stdin.readline()
             code = read_code(line)
-            eval(code, data)
+            bf_eval(code, data)
 
 
 if __name__ == '__main__':
