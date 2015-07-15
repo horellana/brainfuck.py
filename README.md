@@ -1,19 +1,31 @@
 brainfuck.py
 ============
-
+Installation
+---------------
+```
+$ git clone https://github.com/juiko/brainfuck.py
+$ cd brainfuck.py
+$ python setup.py install --user
+```
 Usage
 -----
 ```
 ## to execute a file
 
-brainfuck.py -f 'file' 
+bf.py -f 'file' 
 
 ## to eval code directly
 
-brainfuck.py -e 'brainfuck code' 
+bf.py -e 'brainfuck code' 
 
 ## To start a repl
 
-brainfuck.py -r 
+bf.py -r 
 
+### From python
+
+from brainfuck import bf_eval, read_code, prepare_code
+
+code = prepare_code(read_code(input_string))
+bf_eval(code)
 ```
