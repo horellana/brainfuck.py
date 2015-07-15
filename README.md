@@ -24,8 +24,8 @@ bf.py -r
 
 ### From python
 
-from brainfuck import bf_eval, read_code, prepare_code
+import brainfuck
 
-code = prepare_code(read_code(input_string))
-bf_eval(code)
+code = brainfuck.read(input_string)
+brainfuck.eval(code)
 ```
