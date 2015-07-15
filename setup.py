@@ -7,4 +7,5 @@ setup(name='brainfuck.py',
       license='GPL3',
       author='Hector Orellana',
       author_email='hofm92@gmail.com',
+      scripts=['bf.py'],
       py_modules=['brainfuck'])
