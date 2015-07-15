@@ -1,8 +1,8 @@
 #!python
 
-import sys
 import argparse
 import brainfuck
+from sys import stdin, stdout
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--eval', help='eval a string of code')
@@ -22,8 +22,8 @@ elif args.file:
 elif args.repl:
     data = [0 for i in range(9999)]
     while True:
-        sys.stdout.write("bf> ")
-        sys.stdout.flush()
-        line = sys.stdin.readline()
+        stdout.write("bf> ")
+        stdout.flush()
+        line = stdin.readline()
         code = brainfuck.read(line)
         brainfuck.eval(code, data)

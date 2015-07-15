@@ -1,4 +1,4 @@
-import sys
+from sys import stdin, stdout
 
 
 def find_bracket(code, pos, bracket):
@@ -64,9 +64,9 @@ def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
             else:
                 data[data_pos] -= 1
         elif c == '.':
-            sys.stdout.write(chr(d))
+            stdout.write(chr(d))
         elif c == ',':
-            data[data_pos] = ord(sys.stdin.read(1))
+            data[data_pos] = ord(stdin.read(1))
         else:
             bracket, jmp = c
             if bracket == '[' and d == 0:
