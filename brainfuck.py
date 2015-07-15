@@ -35,12 +35,12 @@ def prepare_code(code):
             for c, i in zip(code, range(len(code)))]
 
 
-def read_code(string):
+def read(string):
     valid = ['>', '<', '+', '-', '.', ',', '[', ']']
-    return [c for c in string if c in valid]
+    return prepare_code([c for c in string if c in valid])
 
 
-def bf_eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
+def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
     while code_pos < len(code):
         step = 1
         c = code[code_pos]
