@@ -40,40 +40,45 @@ def read(string):
     return prepare_code([c for c in string if c in valid])
 
 
-def eval(code, data=[0 for i in range(9999)], code_pos=0, data_pos=0):
-    while code_pos < len(code):
-        step = 1
-        c = code[code_pos]
-        d = data[data_pos]
+def eval_step(code, data, code_pos, data_pos):
+    c = code[code_pos]
+    d = data[data_pos]
+    step = 1
 
-        if c == '>':
-            data_pos = data_pos + 1
-            if data_pos > len(data):
-                data_pos = 0
-        elif c == '<':
-            if data_pos != 0:
-                data_pos -= 1
-        elif c == '+':
-            if d == 255:
-                data[data_pos] = 0
-            else:
-                data[data_pos] += 1
-        elif c == '-':
-            if d == 0:
-                data[data_pos] = 255
-            else:
-                data[data_pos] -= 1
-        elif c == '.':
-            stdout.write(chr(d))
-        elif c == ',':
-            data[data_pos] = ord(stdin.read(1))
+    if c == '>':
+        data_pos = data_pos + 1
+        if data_pos > len(data):
+            data_pos = 0
+    elif c == '<':
+        if data_pos != 0:
+            data_pos -= 1
+    elif c == '+':
+        if d == 255:
+            data[data_pos] = 0
         else:
-            bracket, jmp = c
-            if bracket == '[' and d == 0:
-                step = 0
-                code_pos = jmp
-            elif bracket == ']' and d != 0:
-                step = 0
-                code_pos = jmp
+            data[data_pos] += 1
+    elif c == '-':
+        if d == 0:
+            data[data_pos] = 255
+        else:
+            data[data_pos] -= 1
+    elif c == '.':
+        stdout.write(chr(d))
+    elif c == ',':
+        data[data_pos] = ord(stdin.read(1))
+    else:
+        bracket, jmp = c
+        if bracket == '[' and d == 0:
+            step = 0
+            code_pos = jmp
+        elif bracket == ']' and d != 0:
+            step = 0
+            code_pos = jmp
 
-        code_pos = code_pos + step
+    return (data, code_pos, data_pos, step)
+
+
+def eval(code, data=[0 for i in range(9999)], c_pos=0, d_pos=0):
+    while c_pos < len(code):
+        (data, c_pos, d_pos, step) = eval_step(code, data, c_pos, d_pos)
+        c_pos += step
