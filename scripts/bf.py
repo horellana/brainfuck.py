@@ -2,7 +2,7 @@
 
 import argparse
 import brainfuck
-from sys import stdin, stdout
+from sys import stdin, stdout, stderr, exit
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--eval', help='eval a string of code')
@@ -24,6 +24,11 @@ elif args.repl:
     while True:
         stdout.write("bf> ")
         stdout.flush()
-        line = stdin.readline()
-        code = brainfuck.read(line)
-        brainfuck.eval(code, data)
+        try:
+            line = stdin.readline()
+            codie = brainfuck.read(line)
+            brainfuck.eval(code, data)
+        except KeyboardInterrupt:
+            exit(0)
+        except Exception as error:
+            stderr.write("Error: {}\n".format(error))
