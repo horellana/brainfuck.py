@@ -26,7 +26,7 @@ elif args.repl:
         stdout.flush()
         try:
             line = stdin.readline()
-            codie = brainfuck.read(line)
+            code = brainfuck.read(line)
             brainfuck.eval(code, data)
         except KeyboardInterrupt:
             exit(0)
