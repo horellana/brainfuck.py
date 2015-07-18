@@ -40,7 +40,7 @@ def read(string):
     return prepare_code([c for c in string if c in valid])
 
 
-def eval_step(code, data, code_pos, data_pos):
+def eval_step(code, data, code_pos, data_pos, out=stdout.write):
     c = code[code_pos]
     d = data[data_pos]
     step = 1
@@ -63,7 +63,7 @@ def eval_step(code, data, code_pos, data_pos):
         else:
             data[data_pos] -= 1
     elif c == '.':
-        stdout.write(chr(d))
+        out(chr(d))
     elif c == ',':
         data[data_pos] = ord(stdin.read(1))
     else:
