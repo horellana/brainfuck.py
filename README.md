@@ -3,7 +3,7 @@ brainfuck.py
 Installation
 ---------------
 ```
-$ git clone https://github.com/juiko/brainfuck.py
+$ git clone https://github.com/horellana/brainfuck.py
 $ cd brainfuck.py
 $ python setup.py install --user
 ```
